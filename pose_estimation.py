@@ -15,29 +15,21 @@ class Yolov8PoseModel:
     def run_inference(self, image):
         results = self.model(image)
         return results
-    
+
     def get_filtered_bboxes_by_confidence(self, image):
         results = self.run_inference(image)
-        
+
         conf_filtered_bboxes = []
-        
+
         for result in results:
             boxes = result.boxes.cpu().numpy()
-            all_kpts = result.keypoints
             for i, box in enumerate(boxes):
-                single_kpts_conf = all_kpts[i].conf
-                
-                r_sho_proba = single_kpts_conf[0].cpu().numpy()[KEYPOINTS.index("right_shoulder")]
-                l_sho_proba = single_kpts_conf[0].cpu().numpy()[KEYPOINTS.index("left_shoulder")]
-                r_hip_proba = single_kpts_conf[0].cpu().numpy()[KEYPOINTS.index("right_hip")]
-                l_hip_proba = single_kpts_conf[0].cpu().numpy()[KEYPOINTS.index("left_hip")]
-                
-                if box.conf[0] > self.person_conf and ((r_sho_proba or l_sho_proba) >= self.kpts_threshold) and ((r_hip_proba or l_hip_proba) >= self.kpts_threshold):
-                    conf_filtered_bboxes.append( box.xyxy[0].astype(int))
-        
+
+                if box.conf[0] > self.person_conf:
+                    conf_filtered_bboxes.append(box.xyxy[0].astype(int))
+
         return conf_filtered_bboxes
-    
-    
+
     def get_filtered_bboxes_by_size(self, bboxes, image, percentage=10):
         image_size = image.shape[:2]
         min_bbox_width = image_size[0] * (percentage/100)
