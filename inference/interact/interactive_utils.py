@@ -21,6 +21,8 @@ def torch_prob_to_numpy_mask(prob):
 
 def index_numpy_to_one_hot_torch(mask, num_classes):
     mask = torch.from_numpy(mask).long()
+    print("mask values:", mask)
+    print("num_classes:", num_classes)
     return F.one_hot(mask, num_classes=num_classes).permute(2, 0, 1).float()
 
 """
