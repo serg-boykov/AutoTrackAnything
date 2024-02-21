@@ -28,8 +28,8 @@ from pose_estimation import Yolov8PoseModel
 if __name__ == '__main__':
     warnings.filterwarnings('ignore')
     parser = ArgumentParser()
-    parser.add_argument('--video_path', type=str, default=INPUT_VIDEO_PATH,
-                        help='Path to input video')
+    parser.add_argument('--video_path', type=str,
+                        required=True, help='Path to input video')
     parser.add_argument(
         '--width', type=int, default=INFERENCE_SIZE[0], required=False, help='Inference width')
     parser.add_argument(
