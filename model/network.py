@@ -21,6 +21,7 @@ class XMem(nn.Module):
         map_location is for converting models saved in cuda to cpu
         """
         super().__init__()
+        # map_location = torch.device('cpu')
         model_weights = self.init_hyperparameters(config, model_path, map_location)
 
         self.single_object = config.get('single_object', False)

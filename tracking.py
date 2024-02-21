@@ -21,11 +21,15 @@ from inference.interact.interactive_utils import torch_prob_to_numpy_mask
 from tracker import Tracker
 from pose_estimation import Yolov8PoseModel
 
+# DEVICE='cpu'
+# INPUT_VIDEO_PATH='INPUT_VIDEO_PATH.mp4'
+# MAX_OBJECT_CNT=20
+
 if __name__ == '__main__':
     warnings.filterwarnings('ignore')
     parser = ArgumentParser()
-    parser.add_argument('--video_path', type=str,
-                        required=True, help='Path to input video')
+    parser.add_argument('--video_path', type=str, default=INPUT_VIDEO_PATH,
+                        help='Path to input video')
     parser.add_argument(
         '--width', type=int, default=INFERENCE_SIZE[0], required=False, help='Inference width')
     parser.add_argument(
@@ -95,7 +99,7 @@ if __name__ == '__main__':
             if persons_in_video:
                 if len(class_label_mapping) == 0:  # First persons in video
                     mask = tracker.create_mask_from_img(
-                        frame, yolo_filtered_bboxes, device='0')
+                        frame, yolo_filtered_bboxes, device=DEVICE)
                     unique_labels = np.unique(mask)
                     class_label_mapping = {
                         label: idx for idx, label in enumerate(unique_labels)}
@@ -104,7 +108,7 @@ if __name__ == '__main__':
                     prediction = tracker.add_mask(frame, mask)
                 elif len(filtered_bboxes) > 0:  # Additional/new persons in video
                     mask = tracker.create_mask_from_img(
-                        frame, filtered_bboxes, device='0')
+                        frame, filtered_bboxes, device=DEVICE)
                     unique_labels = np.unique(mask)
                     mask_image = Image.fromarray(mask, mode='L')
                     class_label_mapping = add_new_classes_to_dict(

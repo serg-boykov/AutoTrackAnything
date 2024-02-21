@@ -27,7 +27,7 @@ XMEM_CONFIG = {
 }
 
 # Max possible count of persons in video (if you has error, set bigger number)
-MAX_OBJECT_CNT = 10
+MAX_OBJECT_CNT = 999
 
 # Check new persons in frame every N frames
 YOLO_EVERY = 20
